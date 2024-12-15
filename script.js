@@ -15,11 +15,8 @@ numberButtons.forEach((button) => {
             second += button.textContent;
         }
 
-        // display
-        display.textContent = first + " " + currentOperator + " " + second;
+        updateDisplay(first, second, currentOperator);
     })
-
-    console.log(button.getAttribute("id"));
 });
 
 const operatorButtons = document.querySelectorAll(".operators button");
@@ -42,10 +39,21 @@ operatorButtons.forEach((button) => {
             operatorCount = 0;
         }
 
-        display.textContent = first + " " + currentOperator + " " + second;
+        updateDisplay(first, second, currentOperator);
     })
+});
 
-    console.log(button.getAttribute("id"));
+const clearButton = document.querySelector("#clear");
+clearButton.addEventListener("click", () => {
+    // clear everything
+    first = "";
+    second = "";
+    currentOperator = "";
+
+    // reset operatorCount
+    operatorCount = 0;
+
+    updateDisplay(first, second, currentOperator);
 });
 
 function operate(numOne, numTwo, operator) {
@@ -71,4 +79,8 @@ function operate(numOne, numTwo, operator) {
     }
 
     return answer;
+}
+
+function updateDisplay(numOne, numTwo, operator) {
+    display.textContent = numOne + " " + operator + " " + numTwo;
 }
