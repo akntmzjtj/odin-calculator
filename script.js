@@ -31,12 +31,12 @@ operatorButtons.forEach((button) => {
             operatorCount++;
         }
         else if (button.textContent != "=" && operatorCount == 1) {
-            first = evaluate();
+            first = operate(first, second, currentOperator);
             second = "";
             currentOperator = button.textContent;
         }
         else if (button.textContent == "=" && operatorCount == 1) {
-            first = evaluate();
+            first = operate(first, second, currentOperator);
             second = "";
             currentOperator = "";
             operatorCount = 0;
@@ -48,23 +48,27 @@ operatorButtons.forEach((button) => {
     console.log(button.getAttribute("id"));
 });
 
-function evaluate() {
-    let answer = -1;
-    switch (currentOperator) {
+function operate(numOne, numTwo, operator) {
+    let answer = null;
+
+    switch (operator) {
         case "+":
-            answer = Number(first) + Number(second);
+            answer = Number(numOne) + Number(numTwo);
             console.log(answer);
             break;
         case "-":
-            answer = Number(first) - Number(second);
+            answer = Number(numOne) - Number(numTwo);
             console.log(answer);
             break;
         case "*":
-            answer = Number(first) * Number(second);
+            answer = Number(numOne) * Number(numTwo);
+            console.log(answer);
             break;
         case "/":
-            answer = Number(first) / Number(second);
+            answer = Number(numOne) / Number(numTwo);
+            console.log(answer);
             break;
     }
+
     return answer;
 }
