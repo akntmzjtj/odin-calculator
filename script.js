@@ -1,19 +1,22 @@
 const display = document.querySelector("#display");
 let currentDisplay = "";
-let operatorCount = 0;
 let first = "";
 let second = "";
 let currentOperator = "";
 
+// state
+let firstNumberChosen = false;
+let operatorCount = 0;
+
 const numberButtons = document.querySelectorAll(".numbers button");
 numberButtons.forEach((button) => {
     button.addEventListener("click", () => {
-        if (operatorCount == 0) {
+        if (!firstNumberChosen) {
             first += button.textContent;
         }
         else if (operatorCount == 1) {
             second += button.textContent;
-        }
+        } // else: user must enter an operator
 
         updateDisplay(first, second, currentOperator);
     })
@@ -22,21 +25,32 @@ numberButtons.forEach((button) => {
 const operatorButtons = document.querySelectorAll(".operators button");
 operatorButtons.forEach((button) => {
     button.addEventListener("click", () => {
-        // store currentOperator
-        if (button.textContent != "=" && operatorCount == 0) {
-            currentOperator = button.textContent;
-            operatorCount++;
+        /* If:      the user has entered the first number
+         * Else If: the user has chosen an operator after entering a second number
+         * Else:    operator buttons are disabled until a number has been entered */
+        if (operatorCount == 0 && !isBlank(first)) {
+            if (button.textContent == "=") {
+                console.log("ERROR: cannot use equals button when only a single number has been entered.")
+            }
+            else {
+                // store the chosen operator and wait for next number
+                currentOperator = button.textContent;
+
+                // update state
+                operatorCount++;
+                firstNumberChosen = true;
+            }
         }
-        else if (button.textContent != "=" && operatorCount == 1) {
+        else if (operatorCount == 1 && firstNumberChosen && !isBlank(second)) {
             first = operate(first, second, currentOperator);
-            second = "";
-            currentOperator = button.textContent;
-        }
-        else if (button.textContent == "=" && operatorCount == 1) {
-            first = operate(first, second, currentOperator);
+
+            // reset
             second = "";
             currentOperator = "";
             operatorCount = 0;
+        }
+        else {
+            console.log("ERROR: must enter number.")
         }
 
         updateDisplay(first, second, currentOperator);
@@ -52,6 +66,7 @@ clearButton.addEventListener("click", () => {
 
     // reset operatorCount
     operatorCount = 0;
+    firstNumberChosen = false;
 
     updateDisplay(first, second, currentOperator);
 });
@@ -83,4 +98,8 @@ function operate(numOne, numTwo, operator) {
 
 function updateDisplay(numOne, numTwo, operator) {
     display.textContent = numOne + " " + operator + " " + numTwo;
+}
+
+function isBlank(num) {
+    return num.length == 0;
 }
