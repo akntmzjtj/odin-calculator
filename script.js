@@ -16,7 +16,10 @@ numberButtons.forEach((button) => {
         }
         else if (operatorCount == 1) {
             second += button.textContent;
-        } // else: user must enter an operator
+        }
+        else {
+            console.log("ERROR: must enter an operator.")
+        }
 
         updateDisplay(first, second, currentOperator);
     })
