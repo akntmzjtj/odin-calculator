@@ -8,7 +8,7 @@ let currentOperator = "";
 let firstNumberChosen = false;
 let operatorChosen = false;
 
-const numberButtons = document.querySelectorAll(".numbers button");
+const numberButtons = document.querySelectorAll(".numbers .row .num");
 numberButtons.forEach((button) => {
     button.addEventListener("click", () => {
         if (!firstNumberChosen) {
@@ -55,8 +55,6 @@ operatorButtons.forEach((button) => {
                 alert("Dividing by zero is undefined.")
             }
             else {
-                console.log("I entered here instead...");
-
                 first = operate(first, second, currentOperator);
 
                 // reset
