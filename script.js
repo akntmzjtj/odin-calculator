@@ -3,6 +3,8 @@ let currentDisplay = "";
 let first = "";
 let second = "";
 let currentOperator = "";
+let previousOperator = "";
+let previousSecond = "";
 
 // state
 let firstNumberChosen = false;
@@ -39,7 +41,12 @@ operatorButtons.forEach((button) => {
          * Else:    operator buttons are disabled until a number has been entered */
         if (!operatorChosen && !isBlank(first)) {
             if (button.textContent == "=") {
-                console.log("ERROR: cannot use equals button when only a single number has been entered.")
+                if (isBlank(previousOperator)) {
+                    console.log("ERROR: cannot use equals button when only a single number has been entered.")
+                }
+                else {
+                    first = operate(first, previousSecond, previousOperator);
+                }
             }
             else {
                 // store the chosen operator and wait for next number
@@ -55,9 +62,11 @@ operatorButtons.forEach((button) => {
                 alert("Dividing by zero is undefined.")
             }
             else {
-                console.log("I entered here instead...");
-
                 first = operate(first, second, currentOperator);
+
+                // store previous formula
+                previousOperator = currentOperator;
+                previousSecond = second;
 
                 // reset
                 second = "";
@@ -88,9 +97,11 @@ clearButton.addEventListener("click", () => {
     second = "";
     currentOperator = "";
 
-    // reset operatorCount
+    // reset state
     operatorChosen = false;
     firstNumberChosen = false;
+    previousOperator = "";
+    previousSecond = "";
 
     updateDisplay(first, second, currentOperator);
 });
