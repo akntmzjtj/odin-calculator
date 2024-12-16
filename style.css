@@ -8,32 +8,93 @@ body {
     align-items: center;
 }
 
-#display {
-    height: 50px;
-}
-
 button {
-    width: 50px;
-    height: 50px;
+    width: 64px;
+    height: 64px;
+
+    font-size: 24px;
+    background-color: #F5EFFF;
 }
 
-.calc-buttons {
+#display {
+    background-color: #F5EFFF;
+    box-sizing: border-box;
+    padding: 12px;
+    height: 112px;
+    border-radius: 16px;
+    width: 280px;
+
     display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    font-size: 32px;
+}
+
+.calculator {
+    background-color: #272932;
+    box-sizing: border-box;
+    border-radius: 16px;
+    padding: 32px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.button-container {
+    display: flex;
+    gap: 8px;
+}
+
+.numbers {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .numbers .row {
     display: flex;
+    gap: 8px;
 }
 
 .numbers .row.bottom button {
-    flex: 1;
+    flex: 0 1 auto;
 }
 
 .numbers .row.bottom .num {
-    flex-grow: 2.5;
+    flex: 2;
 }
 
 .operators {
     display: flex;
     flex-direction: column;
+    gap: 8px;
+}
+
+.numbers .row button,
+.operators button {
+    border-style: none;
+    border-radius: 16px;
+
+    transition: font-size 0.25s;
+}
+
+.numbers .row button:hover,
+.operators button:hover {
+    font-size: 28px;
+
+    transition: font-size 0.10s;
+    cursor: pointer;
+}
+
+.numbers .row button:active,
+.operators button:active {
+    font-size: 36px;
+}
+
+.numbers .row.extra button,
+.operators button {
+    background-color: #E6D6FF;
+    color: black;
 }
