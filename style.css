@@ -1,8 +1,39 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#display {
+    height: 50px;
+}
+
 button {
     width: 50px;
     height: 50px;
 }
 
-#display {
-    height: 50px;
+.calc-buttons {
+    display: flex;
+}
+
+.numbers .row {
+    display: flex;
+}
+
+.numbers .row.bottom button {
+    flex: 1;
+}
+
+.numbers .row.bottom .num {
+    flex-grow: 2.5;
+}
+
+.operators {
+    display: flex;
+    flex-direction: column;
 }

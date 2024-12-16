@@ -6,15 +6,21 @@ let currentOperator = "";
 
 // state
 let firstNumberChosen = false;
-let operatorCount = 0;
+let operatorChosen = false;
 
-const numberButtons = document.querySelectorAll(".numbers button");
+const numberButtons = document.querySelectorAll(".numbers .row .num");
 numberButtons.forEach((button) => {
     button.addEventListener("click", () => {
         if (!firstNumberChosen) {
             first += button.textContent;
         }
-        else if (operatorCount == 1) {
+        else if (!isBlank(currentOperator)) {
+            // update state as the user has chosen an operator and has started
+            // to enter numbers
+            if (!operatorChosen) {
+                operatorChosen = true;
+            }
+
             second += button.textContent;
         }
         else {
@@ -31,7 +37,7 @@ operatorButtons.forEach((button) => {
         /* If:      the user has entered the first number
          * Else If: the user has chosen an operator after entering a second number
          * Else:    operator buttons are disabled until a number has been entered */
-        if (operatorCount == 0 && !isBlank(first)) {
+        if (!operatorChosen && !isBlank(first)) {
             if (button.textContent == "=") {
                 console.log("ERROR: cannot use equals button when only a single number has been entered.")
             }
@@ -40,17 +46,30 @@ operatorButtons.forEach((button) => {
                 currentOperator = button.textContent;
 
                 // update state
-                operatorCount++;
                 firstNumberChosen = true;
             }
         }
-        else if (operatorCount == 1 && firstNumberChosen && !isBlank(second)) {
-            first = operate(first, second, currentOperator);
+        else if (operatorChosen && firstNumberChosen && !isBlank(second)) {
+            // check if user is dividing by zero
+            if (currentOperator == "/" && Number(second) == 0) {
+                alert("Dividing by zero is undefined.")
+            }
+            else {
+                first = operate(first, second, currentOperator);
 
-            // reset
-            second = "";
-            currentOperator = "";
-            operatorCount = 0;
+                // reset
+                second = "";
+                operatorChosen = false;
+
+                // check newly chosen operator
+                if (button.textContent == "=") {
+                    currentOperator = "";
+                }
+                else {
+                    // store operator
+                    currentOperator = button.textContent;
+                }
+            }
         }
         else {
             console.log("ERROR: must enter number.")
@@ -68,7 +87,7 @@ clearButton.addEventListener("click", () => {
     currentOperator = "";
 
     // reset operatorCount
-    operatorCount = 0;
+    operatorChosen = false;
     firstNumberChosen = false;
 
     updateDisplay(first, second, currentOperator);
