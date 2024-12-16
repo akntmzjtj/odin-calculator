@@ -14,7 +14,7 @@ numberButtons.forEach((button) => {
         if (!firstNumberChosen) {
             first += button.textContent;
         }
-        else if (!isBlank(operatorChosen)) {
+        else if (!isBlank(currentOperator)) {
             // update state as the user has chosen an operator and has started
             // to enter numbers
             if (!operatorChosen) {
