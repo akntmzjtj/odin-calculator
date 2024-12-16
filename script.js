@@ -50,19 +50,27 @@ operatorButtons.forEach((button) => {
             }
         }
         else if (operatorChosen && firstNumberChosen && !isBlank(second)) {
-            first = operate(first, second, currentOperator);
-
-            // reset
-            second = "";
-            operatorChosen = false;
-
-            // check newly chosen operator
-            if (button.textContent == "=") {
-                currentOperator = "";
+            // check if user is dividing by zero
+            if (currentOperator == "/" && Number(second) == 0) {
+                alert("Dividing by zero is undefined.")
             }
             else {
-                // store operator
-                currentOperator = button.textContent;
+                console.log("I entered here instead...");
+
+                first = operate(first, second, currentOperator);
+
+                // reset
+                second = "";
+                operatorChosen = false;
+
+                // check newly chosen operator
+                if (button.textContent == "=") {
+                    currentOperator = "";
+                }
+                else {
+                    // store operator
+                    currentOperator = button.textContent;
+                }
             }
         }
         else {
