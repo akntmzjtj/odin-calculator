@@ -10,6 +10,7 @@ let previousSecond = "";
 let firstNumberChosen = false;
 let operatorChosen = false;
 
+// Numbers
 const numberButtons = document.querySelectorAll(".numbers .row .num");
 numberButtons.forEach((button) => {
     button.addEventListener("click", () => {
@@ -33,6 +34,7 @@ numberButtons.forEach((button) => {
     })
 });
 
+// Operators
 const operatorButtons = document.querySelectorAll(".operators button");
 operatorButtons.forEach((button) => {
     button.addEventListener("click", () => {
@@ -88,6 +90,36 @@ operatorButtons.forEach((button) => {
 
         updateDisplay(first, second, currentOperator);
     })
+});
+
+// Decimal
+const decimalButton = document.querySelector("#decimal");
+decimalButton.addEventListener("click", () => {
+    // private method?
+    const insertDecimal = function (number) {
+        if (number.indexOf(".") == -1) {
+            if (isBlank(number)) {
+                number = "0" + decimalButton.textContent; // number = "0."
+            }
+            else {
+                number += decimalButton.textContent;
+            }
+        }
+        else {
+            console.log("The number is already a decimal");
+        }
+
+        return number;
+    }
+
+    if (!firstNumberChosen) {
+        first = insertDecimal(first);
+    }
+    else if (!isBlank(currentOperator)) {
+        second = insertDecimal(second);
+    }
+
+    updateDisplay(first, second, currentOperator);
 });
 
 const clearButton = document.querySelector("#clear");
