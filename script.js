@@ -3,6 +3,7 @@ let currentDisplay = "";
 let first = "";
 let second = "";
 let currentOperator = "";
+let currentOperatorButton = null;
 let previousOperator = "";
 let previousSecond = "";
 
@@ -54,6 +55,10 @@ operatorButtons.forEach((button) => {
                 // store the chosen operator and wait for next number
                 currentOperator = button.textContent;
 
+                // glow
+                button.classList.add("operate");
+                currentOperatorButton = button;
+
                 // update state
                 firstNumberChosen = true;
             }
@@ -74,6 +79,11 @@ operatorButtons.forEach((button) => {
                 second = "";
                 operatorChosen = false;
 
+                // glow
+                if (currentOperatorButton != null) {
+                    currentOperatorButton.classList.remove("operate");
+                }
+
                 // check newly chosen operator
                 if (button.textContent == "=") {
                     currentOperator = "";
@@ -81,6 +91,8 @@ operatorButtons.forEach((button) => {
                 else {
                     // store operator
                     currentOperator = button.textContent;
+                    button.classList.add("operate");
+                    currentOperatorButton = button;
                 }
             }
         }
@@ -135,6 +147,10 @@ clearButton.addEventListener("click", () => {
     previousOperator = "";
     previousSecond = "";
 
+    if (currentOperatorButton != null) {
+        currentOperatorButton.classList.remove("operate");
+    }
+
     updateDisplay(first, second, currentOperator);
 });
 
@@ -165,6 +181,8 @@ function operate(numOne, numTwo, operator) {
 
 function updateDisplay(numOne, numTwo, operator) {
     display.textContent = numOne + " " + operator + " " + numTwo;
+
+
 }
 
 function isBlank(num) {

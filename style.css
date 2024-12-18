@@ -14,6 +14,9 @@ button {
 
     font-size: 24px;
     background-color: #F5EFFF;
+
+    font-family: "Helvetica", sans-serif;
+    text-align: center;
 }
 
 #display {
@@ -28,6 +31,7 @@ button {
     justify-content: flex-end;
     align-items: center;
 
+    font-family: "Helvetica", sans-serif;
     font-size: 32px;
 }
 
@@ -97,4 +101,8 @@ button {
 .operators button {
     background-color: #E6D6FF;
     color: black;
+}
+
+.operators button.operate {
+    background-color: #FDFD96;
 }
