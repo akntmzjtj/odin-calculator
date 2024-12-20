@@ -9,3 +9,5 @@ Will I be able to create a calculator after all this time?
  - [ ] Divide by zero
  - [x] User can insert decimal numbers
  - [x] Repeat calculation by pressing `=` button
+ - [x] Percent button functionality
+ - [x] The sign of operand can now be toggled using plus/minus button
