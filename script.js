@@ -1,19 +1,25 @@
 const display = document.querySelector("#display");
 const MAX_LENGTH = 16;
 let currentDisplay = "";
-let first = "";
-let second = "";
+let firstOperand = "";
+let secondOperand = "";
 let currentOperator = "";
 let currentOperatorButton = null;
 let previousOperator = "";
-let previousSecond = "";
+let previousSecondOperand = "";
 
 // state
 let firstNumberChosen = false;
 let operatorChosen = false;
 
-// Numbers
+// Query for elements
 const numberButtons = document.querySelectorAll(".numbers .row .num");
+const clearButton = document.querySelector("#clear");
+const calcOperatorButtons = document.querySelectorAll(".operators .calc-operator");
+const equalsButton = document.querySelector("#equals");
+const decimalButton = document.querySelector("#decimal");
+
+// Numbers
 numberButtons.forEach((button) => {
     button.addEventListener("click", () => {
         let insertNumberChosen = function (currentNum, newDigit) {
@@ -30,8 +36,8 @@ numberButtons.forEach((button) => {
         };
 
         if (!firstNumberChosen) {
-            first = insertNumberChosen(first, button.textContent);
-            updateDisplay(first);
+            firstOperand = insertNumberChosen(firstOperand, button.textContent);
+            updateDisplay(firstOperand);
         }
         else if (!isBlank(currentOperator)) {
             // update state as the user has chosen an operator and has started
@@ -40,8 +46,8 @@ numberButtons.forEach((button) => {
                 operatorChosen = true;
             }
 
-            second = insertNumberChosen(second, button.textContent);
-            updateDisplay(second);
+            secondOperand = insertNumberChosen(secondOperand, button.textContent);
+            updateDisplay(secondOperand);
         }
         else {
             console.log("ERROR: must enter an operator.")
@@ -49,77 +55,48 @@ numberButtons.forEach((button) => {
     })
 });
 
-// Operators
-const operatorButtons = document.querySelectorAll(".operators button");
-operatorButtons.forEach((button) => {
+// Calc operators (+ - * /)
+calcOperatorButtons.forEach((button) => {
     button.addEventListener("click", () => {
-        /* If:      the user has entered the first number
-         * Else If: the user has chosen an operator after entering a second number
-         * Else:    operator buttons are disabled until a number has been entered */
-        if (!operatorChosen && !isBlank(first)) {
-            if (button.textContent == "=") {
-                if (isBlank(previousOperator)) {
-                    console.log("ERROR: cannot use equals button when only a single number has been entered.")
-                }
-                else {
-                    first = operate(first, previousSecond, previousOperator);
-                }
-            }
-            else {
-                // store the chosen operator and wait for next number
-                currentOperator = button.textContent;
+        if (!isBlank(firstOperand) && !operatorChosen) {
+            firstNumberChosen = true;
 
-                // glow
-                button.classList.add("operate");
-                currentOperatorButton = button;
-
-                // update state
-                firstNumberChosen = true;
-            }
+            currentOperator = button.textContent;
+            setGlow(button);
         }
-        else if (operatorChosen && firstNumberChosen && !isBlank(second)) {
-            // check if user is dividing by zero
-            if (currentOperator == "/" && Number(second) == 0) {
-                alert("Dividing by zero is undefined.")
-            }
-            else {
-                first = operate(first, second, currentOperator);
+        else if (firstNumberChosen && operatorChosen && !isBlank(secondOperand)) {
+            firstOperand = operate(firstOperand, secondOperand, currentOperator);
 
-                // store previous formula
-                previousOperator = currentOperator;
-                previousSecond = second;
-
-                // reset
-                second = "";
-                operatorChosen = false;
-
-                // glow
-                if (currentOperatorButton != null) {
-                    currentOperatorButton.classList.remove("operate");
-                }
-
-                // check newly chosen operator
-                if (button.textContent == "=") {
-                    currentOperator = "";
-                }
-                else {
-                    // store operator
-                    currentOperator = button.textContent;
-                    button.classList.add("operate");
-                    currentOperatorButton = button;
-                }
-            }
+            currentOperator = button.textContent;
+            setGlow(button);
         }
         else {
             console.log("ERROR: must enter number.")
         }
 
-        updateDisplay(first);
-    })
+        updateDisplay(firstOperand);
+    });
 });
 
-// Decimal
-const decimalButton = document.querySelector("#decimal");
+// Equals button
+equalsButton.addEventListener("click", () => {
+    if (firstNumberChosen && operatorChosen && !isBlank(secondOperand)) {
+        firstOperand = operate(firstOperand, secondOperand, currentOperator);
+
+        // remove glow on operator
+        currentOperatorButton.classList.remove("operate");
+    }
+    else if (!isBlank(previousOperator)) {
+        firstOperand = operate(firstOperand, previousSecondOperand, previousOperator);
+    }
+    else {
+        console.log("ERROR: cannot use equals button when only a single number has been entered.")
+    }
+
+    updateDisplay(firstOperand);
+});
+
+// Decimal point button
 decimalButton.addEventListener("click", () => {
     // private method?
     const insertDecimal = function (number) {
@@ -139,36 +116,48 @@ decimalButton.addEventListener("click", () => {
     }
 
     if (!firstNumberChosen) {
-        first = insertDecimal(first);
+        firstOperand = insertDecimal(firstOperand);
     }
     else if (!isBlank(currentOperator)) {
-        second = insertDecimal(second);
+        secondOperand = insertDecimal(secondOperand);
     }
 
-    updateDisplay(first, second, currentOperator);
+    updateDisplay(firstOperand, secondOperand, currentOperator);
 });
 
-const clearButton = document.querySelector("#clear");
+// Clear button
 clearButton.addEventListener("click", () => {
     // clear everything
-    first = "";
-    second = "";
+    firstOperand = "";
+    secondOperand = "";
     currentOperator = "";
+    previousOperator = "";
+    previousSecondOperand = "";
 
     // reset state
-    operatorChosen = false;
     firstNumberChosen = false;
-    previousOperator = "";
-    previousSecond = "";
+    operatorChosen = false;
 
+    // remove glow
     if (currentOperatorButton != null) {
         currentOperatorButton.classList.remove("operate");
     }
 
-    updateDisplay(first);
+    updateDisplay(firstOperand);
 });
 
 function operate(numOne, numTwo, operator) {
+    if (operator == "/" && Number(numTwo) == 0) {
+        alert("Dividing by zero is undefined.")
+
+        // reset
+        secondOperand = "";
+        currentOperator = "";
+        operatorChosen = false;
+
+        return numOne;
+    }
+
     let answer = null;
 
     switch (operator) {
@@ -190,7 +179,30 @@ function operate(numOne, numTwo, operator) {
             break;
     }
 
+    // store previous formula
+    previousOperator = operator;
+    previousSecondOperand = numTwo;
+
+    // reset
+    secondOperand = "";
+    currentOperator = "";
+    operatorChosen = false;
+
+
     return answer.toString();
+}
+
+function isBlank(num) {
+    return num.length == 0;
+}
+
+function setGlow(button) {
+    if (currentOperatorButton != null) {
+        currentOperatorButton.classList.remove("operate");
+    }
+
+    button.classList.add("operate");
+    currentOperatorButton = button;
 }
 
 function updateDisplay(str) {
@@ -200,8 +212,4 @@ function updateDisplay(str) {
     else {
         display.textContent = Number(str).toExponential(MAX_LENGTH / 4);
     }
-}
-
-function isBlank(num) {
-    return num.length == 0;
 }
