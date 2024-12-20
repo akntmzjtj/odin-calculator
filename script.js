@@ -26,7 +26,10 @@ numberButtons.forEach((button) => {
         let insertNumberChosen = function (currentNum, newDigit) {
             let out = currentNum;
             // first or second
-            if ((currentNum.length + newDigit.length) < MAX_LENGTH) {
+            if (Number(currentNum) == 0) {
+                out = newDigit;
+            }
+            else if ((currentNum.length + newDigit.length) < MAX_LENGTH) {
                 out = currentNum + newDigit;
             }
             else {
