@@ -26,8 +26,9 @@ numberButtons.forEach((button) => {
     button.addEventListener("click", () => {
         let insertNumberChosen = function (currentNum, newDigit) {
             let out = currentNum;
-            // first or second
-            if (Number(currentNum) == 0) {
+
+            if (currentNum.indexOf(".") == -1 && Number(currentNum) == 0) {
+                // replace operand with newly inputted digit
                 out = newDigit;
             }
             else if ((currentNum.length + newDigit.length) < MAX_LENGTH) {
