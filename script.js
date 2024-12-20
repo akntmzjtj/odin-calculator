@@ -1,4 +1,5 @@
 const display = document.querySelector("#display");
+const MAX_LENGTH = 16;
 let currentDisplay = "";
 let first = "";
 let second = "";
@@ -15,8 +16,22 @@ let operatorChosen = false;
 const numberButtons = document.querySelectorAll(".numbers .row .num");
 numberButtons.forEach((button) => {
     button.addEventListener("click", () => {
+        let insertNumberChosen = function (currentNum, newDigit) {
+            let out = currentNum;
+            // first or second
+            if ((currentNum.length + newDigit.length) < MAX_LENGTH) {
+                out = currentNum + newDigit;
+            }
+            else {
+                console.log("ERROR: Number length limit reached. This cannot be displayed on the screen.");
+            }
+
+            return out;
+        };
+
         if (!firstNumberChosen) {
-            first += button.textContent;
+            first = insertNumberChosen(first, button.textContent);
+            updateDisplay(first);
         }
         else if (!isBlank(currentOperator)) {
             // update state as the user has chosen an operator and has started
@@ -25,13 +40,12 @@ numberButtons.forEach((button) => {
                 operatorChosen = true;
             }
 
-            second += button.textContent;
+            second = insertNumberChosen(second, button.textContent);
+            updateDisplay(second);
         }
         else {
             console.log("ERROR: must enter an operator.")
         }
-
-        updateDisplay(first, second, currentOperator);
     })
 });
 
@@ -100,7 +114,7 @@ operatorButtons.forEach((button) => {
             console.log("ERROR: must enter number.")
         }
 
-        updateDisplay(first, second, currentOperator);
+        updateDisplay(first);
     })
 });
 
@@ -151,7 +165,7 @@ clearButton.addEventListener("click", () => {
         currentOperatorButton.classList.remove("operate");
     }
 
-    updateDisplay(first, second, currentOperator);
+    updateDisplay(first);
 });
 
 function operate(numOne, numTwo, operator) {
@@ -176,13 +190,16 @@ function operate(numOne, numTwo, operator) {
             break;
     }
 
-    return answer;
+    return answer.toString();
 }
 
-function updateDisplay(numOne, numTwo, operator) {
-    display.textContent = numOne + " " + operator + " " + numTwo;
-
-
+function updateDisplay(str) {
+    if (str.length < MAX_LENGTH) {
+        display.textContent = str;
+    }
+    else {
+        display.textContent = Number(str).toExponential(MAX_LENGTH / 4);
+    }
 }
 
 function isBlank(num) {
