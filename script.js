@@ -18,6 +18,7 @@ const clearButton = document.querySelector("#clear");
 const calcOperatorButtons = document.querySelectorAll(".operators .calc-operator");
 const equalsButton = document.querySelector("#equals");
 const decimalButton = document.querySelector("#decimal");
+const changeSign = document.querySelector("#plus-minus");
 
 // Numbers
 numberButtons.forEach((button) => {
@@ -98,7 +99,6 @@ equalsButton.addEventListener("click", () => {
 
 // Decimal point button
 decimalButton.addEventListener("click", () => {
-    // private method?
     const insertDecimal = function (number) {
         if (number.indexOf(".") == -1) {
             if (isBlank(number)) {
@@ -122,6 +122,36 @@ decimalButton.addEventListener("click", () => {
     else if (!isBlank(currentOperator)) {
         secondOperand = insertDecimal(secondOperand);
         updateDisplay(secondOperand);
+    }
+});
+
+changeSign.addEventListener("click", () => {
+    const changeOperandSign = function (number) {
+        if (number.indexOf("-") == -1) {
+            if (isBlank(number)) {
+                number = "-0"; // number = "0."
+            }
+            else {
+                number = "-" + number;
+            }
+        }
+        else {
+            number = number.slice(1);
+        }
+
+        return number;
+    }
+
+    if (!firstNumberChosen) {
+        firstOperand = changeOperandSign(firstOperand);
+        updateDisplay(firstOperand);
+    }
+    else if (!isBlank(currentOperator)) {
+        secondOperand = changeOperandSign(secondOperand);
+        updateDisplay(secondOperand);
+    }
+    else {
+        console.log("ERROR: must enter an operator.")
     }
 });
 
@@ -187,7 +217,6 @@ function operate(numOne, numTwo, operator) {
     secondOperand = "";
     currentOperator = "";
     operatorChosen = false;
-
 
     return answer.toString();
 }
