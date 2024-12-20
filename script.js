@@ -117,12 +117,12 @@ decimalButton.addEventListener("click", () => {
 
     if (!firstNumberChosen) {
         firstOperand = insertDecimal(firstOperand);
+        updateDisplay(firstOperand);
     }
     else if (!isBlank(currentOperator)) {
         secondOperand = insertDecimal(secondOperand);
+        updateDisplay(secondOperand);
     }
-
-    updateDisplay(firstOperand, secondOperand, currentOperator);
 });
 
 // Clear button
