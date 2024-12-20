@@ -19,6 +19,7 @@ const calcOperatorButtons = document.querySelectorAll(".operators .calc-operator
 const equalsButton = document.querySelector("#equals");
 const decimalButton = document.querySelector("#decimal");
 const changeSign = document.querySelector("#plus-minus");
+const percentButton = document.querySelector("#percent");
 
 // Numbers
 numberButtons.forEach((button) => {
@@ -151,6 +152,32 @@ changeSign.addEventListener("click", () => {
     }
     else if (!isBlank(currentOperator)) {
         secondOperand = changeOperandSign(secondOperand);
+        updateDisplay(secondOperand);
+    }
+    else {
+        console.log("ERROR: must enter an operator.")
+    }
+});
+
+percentButton.addEventListener("click", () => {
+    const toPercent = function (number) {
+        if (Number(number) == 0) {
+            console.log("ERROR: cannot change whole number to decimal");
+        }
+        else {
+            number = Number(number) / 100;
+            number = number.toString();
+        }
+
+        return number;
+    }
+
+    if (!firstNumberChosen) {
+        firstOperand = toPercent(firstOperand);
+        updateDisplay(firstOperand);
+    }
+    else if (!isBlank(currentOperator)) {
+        secondOperand = toPercent(secondOperand);
         updateDisplay(secondOperand);
     }
     else {
