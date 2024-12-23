@@ -8,18 +8,6 @@ body {
     align-items: center;
 }
 
-button {
-    width: 64px;
-    height: 64px;
-
-    font-size: 24px;
-    color: black;
-    background-color: #F5EFFF;
-
-    font-family: "Helvetica", sans-serif;
-    text-align: center;
-}
-
 #display {
     background-color: #F5EFFF;
     box-sizing: border-box;
@@ -77,25 +65,39 @@ button {
     gap: 8px;
 }
 
+button {
+    width: 64px;
+    height: 64px;
+
+    font-size: 24px;
+    color: black;
+    opacity: 85%;
+
+    font-family: "Helvetica", sans-serif;
+    text-align: center;
+}
+
 .numbers .row button,
 .operators button {
     border-style: none;
     border-radius: 16px;
 
-    transition: font-size 0.25s;
+    background-color: #F6F0FF;
+    transition: opacity 0.25s;
 }
 
 .numbers .row button:hover,
 .operators button:hover {
-    font-size: 28px;
+    opacity: 100%;
 
-    transition: font-size 0.10s;
     cursor: pointer;
+    transition: opacity 0.15s;
+    /*active*/
 }
 
 .numbers .row button:active,
 .operators button:active {
-    font-size: 36px;
+    opacity: 60%;
 }
 
 .numbers .row.extra button,
