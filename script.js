@@ -27,7 +27,7 @@ numberButtons.forEach((button) => {
         let insertNumberChosen = function (currentNum, newDigit) {
             let out = currentNum;
 
-            if (currentNum.indexOf(".") == -1 && Number(currentNum) == 0) {
+            if (!currentNum.includes(".") && Number(currentNum) == 0) {
                 // replace operand with newly inputted digit
                 out = newDigit;
             }
@@ -105,7 +105,7 @@ equalsButton.addEventListener("click", () => {
 // Decimal point button
 decimalButton.addEventListener("click", () => {
     const insertDecimal = function (number) {
-        if (number.indexOf(".") == -1) {
+        if (!number.includes(".")) {
             if (isBlank(number)) {
                 number = "0" + decimalButton.textContent; // number = "0."
             }
@@ -132,7 +132,7 @@ decimalButton.addEventListener("click", () => {
 
 changeSign.addEventListener("click", () => {
     const changeOperandSign = function (number) {
-        if (number.indexOf("-") == -1) {
+        if (!number.includes("-")) {
             if (isBlank(number)) {
                 number = "-0"; // number = "0."
             }
@@ -156,7 +156,7 @@ changeSign.addEventListener("click", () => {
         updateDisplay(secondOperand);
     }
     else {
-        console.log("ERROR: must enter an operator.")
+        console.log("ERROR: cannot change sign of operand.");
     }
 });
 
